@@ -43,10 +43,10 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
                 {
                     foreach (ZoneRegionSceneManager zoneRegionSceneManager in zoneRegionSceneManagers)
                     {
-                        Vector3 zoneRegionPosition = zoneRegionSceneManager.ZoneRegionScene.zoneScenePosition;
+                        Vector3 zoneRegionPosition = zoneRegionSceneManager.transform.position + zoneRegionSceneManager.zoneSceneBounds.size;
 
-                        float xDistance = Mathf.Abs(zoneRegionSceneManager.ZoneRegionScene.zoneScenePosition.x - playerPosition.x);
-                        float zDistance = Mathf.Abs(zoneRegionSceneManager.ZoneRegionScene.zoneScenePosition.z - playerPosition.z);
+                        float xDistance = Mathf.Abs(zoneRegionPosition.x - playerPosition.x);
+                        float zDistance = Mathf.Abs(zoneRegionPosition.z - playerPosition.z);
 
                         if (xDistance + zDistance > MaxDistance)
                         {
@@ -73,9 +73,12 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
             {
                 return zoneRegionSceneManagers.OrderBy(x =>
                 {
-                    var zoneRegionPosition = x.ZoneRegionScene.zoneScenePosition;
-                    var zoneRegionSize = x.ZoneRegionScene.zoneSize * 0.5f;
+                    //Vector3 zoneRegionPosition = x.transform.position + x.zoneSceneBounds.size;
+                    var zoneRegionPosition = x.transform.position;
+                    //var zoneRegionSize = x.ZoneRegionScene.zoneSize * 0.5f;
+                    var zoneRegionSize = x.zoneSceneBounds.size * 0.5f;
                     var terrainCenter = new Vector3(zoneRegionPosition.x + zoneRegionSize.x, position.y, zoneRegionPosition.z + zoneRegionSize.z);
+                    //var terrainCenter =  new Vector3(zoneRegionPosition.x + x.zoneSceneBounds.size.x, position.y, zoneRegionPosition.z + x.zoneSceneBounds.size.z);
                     return Vector3.Distance(terrainCenter, position);
                 }
                 ).First();
@@ -90,9 +93,9 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
                 if (zoneRegionSceneManagers.Length > 0)
                 {
                     ZoneRegionSceneManager zoneRegion = GetNearestZoneRegion(position);
-                    //LoadUnloadScene(zoneRegion.ZoneRegionScene, true);
-                    SceneManager.LoadScene(zoneRegion.ZoneRegionScene.name, LoadSceneMode.Additive);
-                    zoneRegion.ZoneRegionScene.IsLoaded = true;
+                    LoadScene(zoneRegion);
+                    //SceneManager.LoadScene(zoneRegion.ZoneRegionScene.name, LoadSceneMode.Additive);
+                    //zoneRegion.IsLoaded = true;
                 }
             }
         }

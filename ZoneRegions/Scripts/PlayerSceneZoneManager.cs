@@ -1,4 +1,5 @@
 ﻿// Copyright © 2022 Runningbird Studios.  All Rights Reserved.
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
@@ -15,7 +16,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         {
             if (MaxDistance == 0)
             {
-                MaxDistance = (int)Camera.main.farClipPlane + 500;
+                MaxDistance = (int)Camera.main.farClipPlane * 2;
             }
 
             sceneZoneManager = FindObjectOfType<SceneZoneManager>();
@@ -25,7 +26,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
                 {
                     sceneZoneManager.MaxDistance = MaxDistance;
                 }
-             //   sceneZoneManager.SetClosestZoneRegionActivce(gameObject.transform.position);
+                sceneZoneManager.SetClosestZoneRegionActivce(gameObject.transform.position);
             }
         }
 
