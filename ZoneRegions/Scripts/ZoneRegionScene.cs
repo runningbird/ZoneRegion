@@ -1,5 +1,4 @@
-﻿// Copyright © 2022 Runningbird Studios.  All Rights Reserved.
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 {

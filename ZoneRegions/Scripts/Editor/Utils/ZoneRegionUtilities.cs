@@ -1,5 +1,4 @@
-﻿// Copyright © 2022 Runningbird Studios.  All Rights Reserved.
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 

@@ -1,5 +1,4 @@
-﻿// Copyright © 2022 Runningbird Studios.  All Rights Reserved.
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
