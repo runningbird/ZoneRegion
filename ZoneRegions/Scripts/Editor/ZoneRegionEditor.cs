@@ -302,7 +302,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         {
             GameObject zoneRegion = new GameObject(scene.name);
             ZoneRegionSceneManager regionManager = zoneRegion.AddComponent<ZoneRegionSceneManager>();
-            ZoneRegionScene zoneRegionScene = new ZoneRegionScene();
+            ZoneRegionScene zoneRegionScene = ScriptableObject.CreateInstance<ZoneRegionScene>();
             regionManager.ZoneRegionScene = zoneRegionScene;
 
             SetZoneRegionScene(zoneRegionScene, scene, terrain);
@@ -337,26 +337,21 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 
         private string CreateFolders(Scene activeScene)
         {
-            //int indexOfName = activeScene.path.LastIndexOf('/');
-            //string pathName = activeScene.path.Substring(0, indexOfName);
-            string subFolder = "Assets/Scenes/" + activeScene.name;
-            string subSceneFolder = subFolder + "/ZoneRegions";
-
-            if (!AssetDatabase.IsValidFolder(subFolder))
+            string sceneFolder = "Assets/Scenes/" + activeScene.name;
+            if (!AssetDatabase.IsValidFolder(sceneFolder))
             {
                 string sceneFolderPathGuid = AssetDatabase.CreateFolder("Assets/Scenes", activeScene.name);
-                string sceneFolderPath = AssetDatabase.GUIDToAssetPath(sceneFolderPathGuid);
-
-                subSceneFolder = sceneFolderPath + "/ZoneRegions";
-
-                if (!AssetDatabase.IsValidFolder(subSceneFolder))
-                {
-                    string zoneRegionsPathGuid = AssetDatabase.CreateFolder(sceneFolderPath, "ZoneRegions");
-                    return AssetDatabase.GUIDToAssetPath(zoneRegionsPathGuid);
-                }
+                sceneFolder = AssetDatabase.GUIDToAssetPath(sceneFolderPathGuid);
             }
 
-            return subSceneFolder;
+            string zoneRegionsFolder = sceneFolder + "/ZoneRegions";
+            if (!AssetDatabase.IsValidFolder(zoneRegionsFolder))
+            {
+                string zoneRegionsPathGuid = AssetDatabase.CreateFolder(sceneFolder, "ZoneRegions");
+                zoneRegionsFolder = AssetDatabase.GUIDToAssetPath(zoneRegionsPathGuid);
+            }
+
+            return zoneRegionsFolder;
         }
 
         private string GetNewFileName(string ZoneRegionsFolderPath, string terrainName)

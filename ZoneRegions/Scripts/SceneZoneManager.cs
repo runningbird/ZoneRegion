@@ -23,7 +23,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 
         private void OnDrawGizmos()
         {
-            if (zoneRegionSceneManagers.Length == 0)
+            if (zoneRegionSceneManagers == null || zoneRegionSceneManagers.Length == 0)
             {
                 SetZoneRegionSceneManagers();
             }
