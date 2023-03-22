@@ -8,6 +8,13 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts.Utils
     {
         private static ZoneRegionUtilities instance;
 
+        [SerializeField]
+        public static List<ZoneRegionSceneManager> ZoneRegionSceneManagers;
+        [SerializeField]
+        public static NavMeshData ZoneRegionsNavMesh;
+        [SerializeField]
+        public static GameObject SceneZoneRegion;
+
         protected ZoneRegionUtilities()
         {
         }
@@ -28,22 +35,13 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts.Utils
 
         public static void LoadZoneRegionSceneManagers()
         {
-            if (ZoneRegionSceneManagers.Count == 0)
-            {
-                ZoneRegionSceneManagers = new List<ZoneRegionSceneManager>(GameObject.FindObjectsOfType<ZoneRegionSceneManager>());
-            }
+            ZoneRegionSceneManagers = new List<ZoneRegionSceneManager>(GameObject.FindObjectsOfType<ZoneRegionSceneManager>());
         }
 
         public static void LoadSceneZoneRegion()
         {
-            if (SceneZoneRegion == null)
-            {
-                SceneZoneRegion = GameObject.Find("ZoneRegions");
-            }
+           SceneZoneRegion = GameObject.Find("ZoneRegions");
         }
-
-        public static List<ZoneRegionSceneManager> ZoneRegionSceneManagers;
-        public static NavMeshData ZoneRegionsNavMesh;
-        public static GameObject SceneZoneRegion;
+   
     }
 }

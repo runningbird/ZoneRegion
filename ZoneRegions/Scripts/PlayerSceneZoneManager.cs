@@ -5,10 +5,13 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 {
     public class PlayerSceneZoneManager : MonoBehaviour
     {
+        [SerializeField]
         private SceneZoneManager sceneZoneManager;
-
+        [SerializeField]
         public ZoneRegionSceneManager CurrentZoneRegion;
+        [SerializeField]
         public ZoneRegionSceneManager PrevousZoneRegion;
+        [SerializeField]
         public int MaxDistance;
 
         private void Start()

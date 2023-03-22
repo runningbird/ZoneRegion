@@ -37,7 +37,6 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         private static void ShowWindow()
         {
             GetWindow<ZoneRegionEditor>(false, "Zone Region UTILITIES", true);
-            ZoneRegionUtilities.Instance();
         }
 
         private void OnGUI()
@@ -49,7 +48,6 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
             if (Application.isPlaying) return;
             string[] toolbarStrings = { "Zones", "NavMesh", "Terrain Tools" };
             mainToolbarInt = GUILayout.Toolbar(mainToolbarInt, toolbarStrings);
-            ZoneRegionUtilities.Instance();
             switch (mainToolbarInt)
             {
                 case 0:
@@ -101,6 +99,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 
         private void ShowZoneRegionSceneManagers()
         {
+            ZoneRegionUtilities.Instance();
             if (ZoneRegionUtilities.SceneZoneRegion != null && ZoneRegionUtilities.ZoneRegionSceneManagers.Count > 0)
             {
                 if (GUILayout.Button("Load All Scenes"))
@@ -115,9 +114,9 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
                 EditorGUILayout.BeginHorizontal();
                 scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
-                foreach (ZoneRegionSceneManager zoneRegionSceneManager in ZoneRegionUtilities.ZoneRegionSceneManagers)
+                foreach (ZoneRegionSceneManager zoneRegionSceneManager in ZoneRegionUtilities.ZoneRegionSceneManagers.OrderBy(s => s.zoneScene).ToArray())
                 {
-                    if (GUILayout.Button(zoneRegionSceneManager.zoneScene.ToString()))
+                    if (GUILayout.Button(zoneRegionSceneManager.ZoneRegionScene.zoneScene))
                     {
                         Selection.SetActiveObjectWithContext(zoneRegionSceneManager.gameObject, null);
                     }
@@ -187,7 +186,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         {
             foreach (ZoneRegionSceneManager manager in ZoneRegionUtilities.ZoneRegionSceneManagers)
             {
-                SceneUtilities.UnloadScene(manager.zoneScene);
+                SceneUtilities.UnloadScene(manager.ZoneRegionScene.zoneScene);
             }
         }
 
@@ -195,7 +194,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         {
             foreach (ZoneRegionSceneManager manager in ZoneRegionUtilities.ZoneRegionSceneManagers)
             {
-                SceneUtilities.LoadSceneAdditively(manager.zoneScene);
+                SceneUtilities.LoadSceneAdditively(manager.ZoneRegionScene.zoneScene);
             }
         }
 
@@ -209,14 +208,14 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 
                     foreach (ZoneRegionSceneManager zoneRegionSceneManager in ZoneRegionUtilities.ZoneRegionSceneManagers)
                     {
-                        SceneUtilities.LoadSceneAdditively(zoneRegionSceneManager.zoneScene);
+                        SceneUtilities.LoadSceneAdditively(zoneRegionSceneManager.ZoneRegionScene.zoneScene);
 
-                        Scene zoneScene = SceneManager.GetSceneByName(zoneRegionSceneManager.zoneScene);
+                        Scene zoneScene = SceneManager.GetSceneByName(zoneRegionSceneManager.ZoneRegionScene.zoneScene);
                         if (zoneScene != null)
                         {
                             NavMeshUtilities.CreateOffMeshLinks(zoneScene, linkWidth);
                         }
-                        SceneUtilities.UnloadScene(zoneRegionSceneManager.zoneScene);
+                        SceneUtilities.UnloadScene(zoneRegionSceneManager.ZoneRegionScene.zoneScene);
                     }
                 }
             }
@@ -236,14 +235,14 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 
                     foreach (ZoneRegionSceneManager zoneRegionSceneManager in ZoneRegionUtilities.ZoneRegionSceneManagers)
                     {
-                        SceneUtilities.LoadSceneAdditively(zoneRegionSceneManager.zoneScene);
+                        SceneUtilities.LoadSceneAdditively(zoneRegionSceneManager.ZoneRegionScene.ToString());
 
-                        Scene zoneScene = SceneManager.GetSceneByName(zoneRegionSceneManager.zoneScene);
+                        Scene zoneScene = SceneManager.GetSceneByName(zoneRegionSceneManager.ZoneRegionScene.ToString());
                         if (zoneScene != null)
                         {
                             NavMeshUtilities.BakeNavMesh(zoneScene);
                         }
-                        SceneUtilities.UnloadScene(zoneRegionSceneManager.zoneScene);
+                        SceneUtilities.UnloadScene(zoneRegionSceneManager.ZoneRegionScene.ToString());
                     }
                 }
             }
@@ -266,7 +265,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
                 string sceneFolderPath = CreateFolders(activeScene);
                 int index = 0;
 
-                foreach (Terrain terrain in terrains)
+                foreach (Terrain terrain in terrains.OrderBy(s => s.name).ToArray())
                 {
                     EditorUtility.DisplayProgressBar("ZoneRegion", "Creating Zone Regions", index);
                     Scene scene = CreateScene(terrain, sceneFolderPath);
@@ -281,9 +280,9 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
             Scene activeScene = SceneManager.GetActiveScene();
             Scene newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
 
-            string newScenePath = GetNewFileName(sceneFolderPath, terrain.name);
+            string newScenePath = GetNewFileName(sceneFolderPath, activeScene.name, terrain.name);
 
-            newScene.name = terrain.name;
+            newScene.name = activeScene.name + "_" + terrain.name;
             if (terrain.gameObject.transform.parent)
             {
                 terrain.gameObject.transform.parent = null;
@@ -354,9 +353,9 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
             return zoneRegionsFolder;
         }
 
-        private string GetNewFileName(string ZoneRegionsFolderPath, string terrainName)
+        private string GetNewFileName(string ZoneRegionsFolderPath, string activeScenename, string terrainName)
         {
-            string newFileName = ZoneRegionsFolderPath + "/" + terrainName + ".unity";
+            string newFileName = ZoneRegionsFolderPath + "/" + activeScenename + "_" + terrainName + ".unity";
             string scenePath = AssetDatabase.GenerateUniqueAssetPath(newFileName);
             return newFileName;
         }

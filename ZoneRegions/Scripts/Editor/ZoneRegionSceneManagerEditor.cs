@@ -26,39 +26,39 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         {
             serializedObject.Update();
 
-            //EditorGUI.BeginChangeCheck();
-            //EditorGUILayout.LabelField("Zone Region Scene Manager ");
-            //EditorGUILayout.LabelField("Zone Scene", ZoneRegionSceneManager.zoneScene);
-            //EditorGUILayout.LabelField("Zone Scene Position", ZoneRegionSceneManager.zoneScenePosition.ToString());
-            //EditorGUILayout.LabelField("Neighboring Zone Regions");
-            //EditorGUILayout.LabelField("Top Neighbor", ZoneRegionSceneManager.topNeighbor);
-            //EditorGUILayout.LabelField("Bottom Neighbor", ZoneRegionSceneManager.bottomNeighbor);
-            //EditorGUILayout.LabelField("Left Neighbor", ZoneRegionSceneManager.leftNeighbor);
-            //EditorGUILayout.LabelField("Right Neighbor", ZoneRegionSceneManager.rightNeighbor);
-            //EditorGUILayout.LabelField("IsLoaded", ZoneRegionSceneManager.ZoneRegionScene.IsLoaded.ToString());
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.LabelField("Zone Region Scene Manager ");
+            EditorGUILayout.LabelField("Zone Scene", ZoneRegionSceneManager.zoneScene);
+            EditorGUILayout.LabelField("Zone Scene Position", ZoneRegionSceneManager.zoneScenePosition.ToString());
+            EditorGUILayout.LabelField("Neighboring Zone Regions");
+            EditorGUILayout.LabelField("Top Neighbor", ZoneRegionSceneManager.topNeighbor);
+            EditorGUILayout.LabelField("Bottom Neighbor", ZoneRegionSceneManager.bottomNeighbor);
+            EditorGUILayout.LabelField("Left Neighbor", ZoneRegionSceneManager.leftNeighbor);
+            EditorGUILayout.LabelField("Right Neighbor", ZoneRegionSceneManager.rightNeighbor);
+            EditorGUILayout.LabelField("IsLoaded", ZoneRegionSceneManager.ZoneRegionScene.IsLoaded.ToString());
             //EditorGUILayout.LabelField("IsUpdated", ZoneRegionSceneManager.IsUpdated.ToString());
             base.OnInspectorGUI();
             if (GUILayout.Button("Load Scene"))
             {
-                SceneUtilities.LoadSceneAdditively(ZoneRegionSceneManager.zoneScene);
+                SceneUtilities.LoadSceneAdditively(ZoneRegionSceneManager.ZoneRegionScene.name);
             }
 
             if (GUILayout.Button("Unload Scene"))
             {
-                SceneUtilities.UnloadScene(ZoneRegionSceneManager.zoneScene);
+                SceneUtilities.UnloadScene(ZoneRegionSceneManager.ZoneRegionScene.name);
             }
 
             if (GUILayout.Button("Bake NavMesh"))
             {
-                Scene zoneScene = SceneManager.GetSceneByName(ZoneRegionSceneManager.zoneScene);
+                Scene zoneScene = SceneManager.GetSceneByName(ZoneRegionSceneManager.ZoneRegionScene.name);
                 if (zoneScene == null)
                 {
-                    SceneUtilities.LoadSceneAdditively(ZoneRegionSceneManager.zoneScene);
+                    SceneUtilities.LoadSceneAdditively(ZoneRegionSceneManager.ZoneRegionScene.name);
                 }
 
                 NavMeshUtilities.BakeNavMesh(zoneScene);
             }
-
+            EditorGUILayout.LabelField("NavMeshLink Width");
             string linkWidthString = GUILayout.TextField(linkWidth.ToString());
             if (int.TryParse(linkWidthString, out int result))
             {
@@ -67,10 +67,10 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
 
             if (GUILayout.Button("Create OffMesh Links"))
             {
-                Scene zoneScene = SceneManager.GetSceneByName(ZoneRegionSceneManager.zoneScene);
+                Scene zoneScene = SceneManager.GetSceneByName(ZoneRegionSceneManager.ZoneRegionScene.name);
                 if (zoneScene == null)
                 {
-                    SceneUtilities.LoadSceneAdditively(ZoneRegionSceneManager.zoneScene);
+                    SceneUtilities.LoadSceneAdditively(ZoneRegionSceneManager.ZoneRegionScene.name);
                 }
                 NavMeshUtilities.CreateOffMeshLinks(zoneScene, linkWidth);
             }
@@ -80,7 +80,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
             {
                 EditorUtility.SetDirty(ZoneRegionSceneManager);
             }
-            serializedObject.ApplyModifiedProperties();
+            //serializedObject.ApplyModifiedProperties();
         }
 
         public void OnSceneGUI()
@@ -93,9 +93,9 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
         public Bounds OnGetFrameBounds()
         {
             ZoneRegionSceneManager script = (ZoneRegionSceneManager)target;
-            // Bounds bounds = new Bounds(scriptsition, script.transform.localScale);
-            Debug.Log("Focus on: " + target.name + " with bounds: " + script.zoneSceneBounds);
-            return script.zoneSceneBounds;
+            
+            Debug.Log("Focus on: " + target.name + " with bounds: " + script.ZoneRegionScene.zoneSceneBounds);
+            return script.ZoneRegionScene.zoneSceneBounds;
         }
 
         public enum Side

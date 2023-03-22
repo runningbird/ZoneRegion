@@ -20,7 +20,7 @@ namespace Assets.RunningbirdStudios.ZoneRegions.Scripts
             _ = DrawDefaultInspector();
 
             EditorGUI.BeginChangeCheck();
-            zoneRegionScene.zoneSize = EditorGUILayout.Vector3Field("Zone Size", zoneRegionScene.zoneSize);
+            //zoneRegionScene.zoneSize = EditorGUILayout.Vector3Field("Zone Size", zoneRegionScene.zoneSize);
 
             bool somethingChanged = EditorGUI.EndChangeCheck();
             if (somethingChanged)
